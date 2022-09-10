@@ -18,6 +18,7 @@ class CompanyView(View):
             else:
                 data = {'message': 'Company not found'}
             return JsonResponse(data)
+
         else:
             companies = list(Company.objects.values())
 
@@ -44,8 +45,24 @@ class CompanyView(View):
         data = {'message': 'Company created successfully'}
         return JsonResponse(data)
 
-    def put(self, request):
-        pass
+    def put(self, request, id):
+        json_data = json.loads(request.body)
+        companies = list(Company.objects.filter(id=id).values())
+
+        if len(companies) > 0:
+            company = Company.objects.get(id=id)
+
+            company.name = json_data['name']
+            company.address = json_data['address']
+            company.city = json_data['city']
+            company.country = json_data['country']
+            company.save()
+
+            data = {'message': 'Company updated successfully'}
+
+        else:
+            data = {'message': 'Company not found'}
+        return JsonResponse(data)
 
     def delete(self, request):
         pass
