@@ -8,14 +8,24 @@ import json
 # Create your views here.
 
 class CompanyView(View):
-    def get(self, request):
-        companies = list(Company.objects.values())
-
-        if len(companies) > 0:
-            data = {'message': 'Success', 'companies': companies}
+    def get(self, request, id = 0):
+        if id > 0:
+            companies = list(Company.objects.filter(id=id).values())
+                 
+            if len(companies) > 0:
+                company = companies[0]
+                data = {'message': 'Success', 'company': company}
+            else:
+                data = {'message': 'Company not found'}
+            return JsonResponse(data)
         else:
-            data = {'message': 'Companies not found ...'}
-        return JsonResponse(data)
+            companies = list(Company.objects.values())
+
+            if len(companies) > 0:
+              data = {'message': 'Success', 'companies': companies}
+            else:
+              data = {'message': 'Companies not found ...'}
+            return JsonResponse(data)
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

@@ -20,4 +20,5 @@ from api.views import CompanyView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/companies/', CompanyView.as_view()),
+    path('api/companies/<int:id>', CompanyView.as_view()),
 ]
